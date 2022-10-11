@@ -5,34 +5,26 @@ metadata:
   namespace: argocd
 spec:
   generators:
-    - merge:
-        mergeKeys:
-          - env
-          - app
-        generators:
-          - git:
-              repoURL: https://github.com/vette1861/ArgoCDRollouts.git
-              revision: HEAD
-              files:
-              - path: charts/helm-poc/defaults.yaml
-          - clusters:
-              values:
-                env: '{{ metadata.labels.env }}'
+    - git:
+        repoURL: https://github.com/vette1861/ArgoCDRollouts.git
+        revision: HEAD
+        files:
+        - path: charts/helm-poc/defaults.json
   template:
     metadata:
-      name: 'helm-poc-{{ values.env }}'
+      name: 'helm-poc-{{ env }}'
       labels:
         app: "helm-poc"
     spec:
       project: default
       destination:
-        server: "{{ server }}"
-        namespace: helm-poc
+        server: "{{ cluster.server }}"
+        namespace: '{{ namespace }}'
       source:
         helm:
           valueFiles:
-            - values/values-sandbox.yaml
-          releaseName: metrics-server
+            - 'values/values-{{ env }}.yaml'
+          releaseName: '{{ chart.name }}'
         path: helm
         repoURL: https://charts.bitnami.com/bitnami # 5.11.7 # 6.2.1
         targetRevision: '{{ chart.version }}'
