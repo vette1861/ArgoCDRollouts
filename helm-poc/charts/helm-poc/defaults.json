@@ -1,0 +1,11 @@
+[
+    {
+      "app": "helm-poc",
+      "env": "sandbox",
+      "namespace": "helm-poc",
+      "chart": {
+        "version": "5.11.7",
+        "name": "metrics-server"
+      }
+    }
+  ]
