@@ -23,7 +23,7 @@ spec:
       source:
         helm:
           valueFiles:
-            - 'values/values-{{ env }}.yaml'
+            - 'helm-poc/values/helm-poc/values-{{ env }}.yaml'
           releaseName: '{{ chart.name }}'
         path: helm
         repoURL: https://charts.bitnami.com/bitnami # 5.11.7 # 6.2.1
