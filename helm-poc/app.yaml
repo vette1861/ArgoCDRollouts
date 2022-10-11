@@ -5,11 +5,16 @@ metadata:
   namespace: argocd
 spec:
   generators:
-    - git:
-        repoURL: https://github.com/vette1861/ArgoCDRollouts.git
-        revision: HEAD
-        files:
-        - path: helm-poc/charts/helm-poc/defaults.yaml
+    - matrix:
+        generators:
+          - git:
+              repoURL: https://github.com/vette1861/ArgoCDRollouts.git
+              revision: HEAD
+              files:
+              - path: helm-poc/charts/helm-poc/defaults.yaml
+          - clusters:
+              values:
+                  env: '{{ metadata.labels.env }}'
   template:
     metadata:
       name: 'helm-poc-{{ env }}'
@@ -18,7 +23,7 @@ spec:
     spec:
       project: default
       destination:
-        server: "{{ cluster.server }}"
+        server: "{{ server }}"
         namespace: '{{ namespace }}'
       source:
         helm:
