@@ -18,7 +18,6 @@ spec:
                     revision: HEAD
                     files:
                     - path: helm-poc/charts/**/defaults.yaml
-                    - path: 'helm-poc/values/{{ values.path }}/values-{{ values.env }}.yaml'
                 - clusters:
                     values:
                       env: '{{ metadata.labels.env }}'
@@ -26,9 +25,6 @@ spec:
                       chartName: '{{ chart.name }}'
                       chartVersion: '{{ chart.version }}'
                       namespace: '{{ namespace }}'
-                      basename: '{{ path.basename }}'
-                      path: '{{path[0]}}'
-                      valuesFile: '{{ values.yaml }}'
           - matrix:
               generators:
                 - git:
@@ -36,7 +32,6 @@ spec:
                     revision: HEAD
                     files:
                     - path: helm-poc/charts/**/overrides.yaml
-                    - path: 'helm-poc/values/{{ values.path }}/values-{{ values.env }}.yaml'
                 - clusters:
                     selector:
                       matchLabels: 
@@ -47,9 +42,6 @@ spec:
                       chartName: '{{ chart.name }}'
                       chartVersion: '{{ chart.version }}'
                       namespace: '{{ namespace }}'
-                      basename: '{{ path.basename }}'
-                      path: '{{path[0]}}'
-                      valuesFile: '{{ values.yaml }}'
   template:
     metadata:
       name: "{{ app }}-{{ name }}"
@@ -62,17 +54,7 @@ spec:
         namespace: '{{ values.namespace }}'
       source:
         helm:
-          valueFiles:
-          - values.yaml
-          values: |
-            '{{ values.valuesFile }}'
-          # parameters:
-          # - name: commonLabels.env
-          #   value: '{{ commonLabels.env }}'
-          # - name: commonLabels.foo
-          #   value: '{{ commonLabels.foo }}'
-          # releaseName: '{{ values.chartName }}'
-        # path: './{{ values.path }}/values/{{ values.basename }}'
+          releaseName: '{{ values.chartName }}'
         chart: '{{ values.chartName }}'
         repoURL: https://charts.bitnami.com/bitnami
         targetRevision: '{{ values.chartVersion }}'
