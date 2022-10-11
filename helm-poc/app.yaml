@@ -18,6 +18,7 @@ spec:
                     revision: HEAD
                     files:
                     - path: helm-poc/charts/**/defaults.yaml
+                    - path: 'helm-poc/values/{{ values.path }}/values-{{ values.env }}.yaml'
                 - clusters:
                     values:
                       env: '{{ metadata.labels.env }}'
@@ -27,6 +28,7 @@ spec:
                       namespace: '{{ namespace }}'
                       basename: '{{ path.basename }}'
                       path: '{{path[0]}}'
+                      valuesFile: '{{ values.yaml }}'
           - matrix:
               generators:
                 - git:
@@ -34,6 +36,7 @@ spec:
                     revision: HEAD
                     files:
                     - path: helm-poc/charts/**/overrides.yaml
+                    - path: 'helm-poc/values/{{ values.path }}/values-{{ values.env }}.yaml'
                 - clusters:
                     selector:
                       matchLabels: 
@@ -46,11 +49,7 @@ spec:
                       namespace: '{{ namespace }}'
                       basename: '{{ path.basename }}'
                       path: '{{path[0]}}'
-    - git:
-        repoURL: https://github.com/vette1861/ArgoCDRollouts.git
-        revision: HEAD
-        files:
-        - path: 'helm-poc/values/{{ values.path }}/values-{{ values.env }}.yaml'
+                      valuesFile: '{{ values.yaml }}'
   template:
     metadata:
       name: "{{ app }}-{{ name }}"
@@ -66,7 +65,7 @@ spec:
           valueFiles:
           - values.yaml
           values: |-
-            {{values}}
+            {{ values.valuesFile }}
           # parameters:
           # - name: commonLabels.env
           #   value: '{{ commonLabels.env }}'
