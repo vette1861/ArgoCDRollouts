@@ -4,3 +4,6 @@
   chart:
     version: 5.11.7
     name: metrics-server
+  cluster:
+    name: minikube-sandbox
+    server: https://kubernetes.default.svc

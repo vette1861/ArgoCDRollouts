@@ -9,7 +9,7 @@ spec:
         repoURL: https://github.com/vette1861/ArgoCDRollouts.git
         revision: HEAD
         files:
-        - path: charts/helm-poc/defaults.json
+        - path: helm-poc/charts/helm-poc/defaults.yaml
   template:
     metadata:
       name: 'helm-poc-{{ env }}'
