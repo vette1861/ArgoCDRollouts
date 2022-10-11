@@ -1,4 +1,3 @@
 values.yaml: |
-  commonLabels:
-    env: prod
-    foo: bar
+  commonLabels.env: prod
+  commonLabels.foo: bar

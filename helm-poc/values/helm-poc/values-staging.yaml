@@ -1,4 +1,3 @@
 values.yaml: |
-  commonLabels:
-    env: staging
-    foo: bar
+  commonLabels.env: staging
+  commonLabels.foo: bar

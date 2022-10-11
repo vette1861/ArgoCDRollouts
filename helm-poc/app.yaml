@@ -64,8 +64,8 @@ spec:
         helm:
           valueFiles:
           - values.yaml
-          values: |-
-            {{ values.valuesFile }}
+          values: |
+            '{{ values.valuesFile }}'
           # parameters:
           # - name: commonLabels.env
           #   value: '{{ commonLabels.env }}'
