@@ -1,3 +1,4 @@
-commonLabels:
-  env: staging
-  foo: bar
+values:
+  commonLabels:
+    env: staging
+    foo: bar

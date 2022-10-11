@@ -1,3 +1,4 @@
-commonLabels:
-  env: sandbox
-  foo: bar
+values:
+  commonLabels:
+    env: sandbox
+    foo: bar

@@ -5,35 +5,82 @@ metadata:
   namespace: argocd
 spec:
   generators:
-    - matrix:
+    - merge:
+        mergeKeys:
+          - server
+          - app
+          - name
         generators:
-          - git:
-              repoURL: https://github.com/vette1861/ArgoCDRollouts.git
-              revision: HEAD
-              files:
-              - path: helm-poc/charts/helm-poc/defaults.yaml
-          - clusters:
-              values:
-                  env: '{{ metadata.labels.env }}'
+          - matrix:
+              generators:
+                - git:
+                    repoURL: https://github.com/vette1861/ArgoCDRollouts.git
+                    revision: HEAD
+                    files:
+                    - path: helm-poc/charts/**/defaults.yaml
+                - clusters:
+                    values:
+                      env: '{{ metadata.labels.env }}'
+                      app: '{{ app }}'
+                      chartName: '{{ chart.name }}'
+                      chartVersion: '{{ chart.version }}'
+                      namespace: '{{ namespace }}'
+                      basename: '{{ path.basename }}'
+                      path: '{{path[0]}}'
+          - matrix:
+              generators:
+                - git:
+                    repoURL: https://github.com/vette1861/ArgoCDRollouts.git
+                    revision: HEAD
+                    files:
+                    - path: helm-poc/charts/**/overrides.yaml
+                - clusters:
+                    selector:
+                      matchLabels: 
+                        env: '{{ env }}'
+                    values:
+                      env: '{{ env }}'
+                      app: '{{ app }}'
+                      chartName: '{{ chart.name }}'
+                      chartVersion: '{{ chart.version }}'
+                      namespace: '{{ namespace }}'
+                      basename: '{{ path.basename }}'
+                      path: '{{path[0]}}'
+    - git:
+        repoURL: https://github.com/vette1861/ArgoCDRollouts.git
+        revision: HEAD
+        files:
+        - path: 'helm-poc/values/{{ values.path }}/values-{{ values.env }}.yaml'
   template:
     metadata:
-      name: 'helm-poc-{{ env }}'
+      name: "{{ app }}-{{ name }}"
       labels:
-        app: "helm-poc"
+        app: "{{ app }}"
     spec:
       project: default
       destination:
-        server: "{{ server }}"
-        namespace: '{{ namespace }}'
+        server: '{{ server }}'
+        namespace: '{{ values.namespace }}'
       source:
         helm:
           valueFiles:
-            - 'helm-poc/values/helm-poc/values-{{ env }}.yaml'
-          releaseName: '{{ chart.name }}'
-        path: helm
-        repoURL: https://charts.bitnami.com/bitnami # 5.11.7 # 6.2.1
-        targetRevision: '{{ chart.version }}'
+          - values.yaml
+          values: |-
+            {{values}}
+          # parameters:
+          # - name: commonLabels.env
+          #   value: '{{ commonLabels.env }}'
+          # - name: commonLabels.foo
+          #   value: '{{ commonLabels.foo }}'
+          # releaseName: '{{ values.chartName }}'
+        # path: './{{ values.path }}/values/{{ values.basename }}'
+        chart: '{{ values.chartName }}'
+        repoURL: https://charts.bitnami.com/bitnami
+        targetRevision: '{{ values.chartVersion }}'
       syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
         syncOptions:
           - CreateNamespace=true
           - ApplyOutOfSyncOnly=true
