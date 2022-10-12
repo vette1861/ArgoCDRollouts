@@ -3,4 +3,3 @@ metrics-server:
     env: sandbox
     foo: bar
     values: values-sandbox
-    chart_version: 6.2.1-sandbox
