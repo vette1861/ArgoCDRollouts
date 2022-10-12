@@ -1,6 +1,4 @@
-envValues:
-  foo: bar
-  metrics-server:
-    commonLabels:
-      env: prod
-      foo: bar
+metrics-server:
+  commonLabels:
+    env: prod
+    foo: bar

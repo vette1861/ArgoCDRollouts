@@ -1,5 +1,3 @@
-baseValues: |
-  metrics-server:
-    commonLabels:
-      env: staging
-      foo: bar
+metrics-server:
+  commonLabels:
+    foo: bar

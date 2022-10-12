@@ -1,6 +1,4 @@
-envValues:
-  foo: bar
-  metrics-server:
-    commonLabels:
-      env: sandbox
-      foo: bar
+metrics-server:
+  commonLabels:
+    env: sandbox
+    foo: bar

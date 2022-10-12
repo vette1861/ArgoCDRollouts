@@ -58,19 +58,6 @@ spec:
                       chart.pathValues: '../../../values/{{ app }}' # preconfigure path to values file to simplify the template below
                       namespace: '{{ namespace }}'
                       type: 'override'
-          # - matrix:
-          #     generators:
-          - git:
-              repoURL: https://github.com/vette1861/ArgoCDRollouts.git
-              revision: HEAD
-              files:
-              - path: 'helm-poc/values/helm-poc/values-{{ values.env }}.yaml' 
-              # - path: 'helm-poc/values/{{ app }}/values.yaml' 
-                # - git:
-                #     repoURL: https://github.com/vette1861/ArgoCDRollouts.git
-                #     revision: HEAD
-                #     files:
-                #     - path: '{{ values.chart.pathValues }}/values.yaml' 
   template:
     metadata:
       name: "{{ values.app }}-{{ name }}"
@@ -84,12 +71,9 @@ spec:
       source:
         helm:
           releaseName: '{{ values.chart.name }}'
-          values: |
-            metrics-server: |
-              '{{ envValues }}'
-          # valueFiles:
-          #   - '{{ values.chart.pathValues }}/values-{{ values.env }}.yaml'
-          #   - '{{ values.chart.pathValues }}/values.yaml'
+          valueFiles:
+            - '{{ values.chart.pathValues }}/values-{{ values.env }}.yaml'
+            - '{{ values.chart.pathValues }}/values.yaml'
         path: '{{ values.chart.path }}'
         repoURL: https://github.com/vette1861/ArgoCDRollouts.git
       syncPolicy:
