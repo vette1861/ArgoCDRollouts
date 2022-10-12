@@ -1,4 +1,4 @@
-baseValues: |
+baseValues:
   metrics-server:
     commonLabels:
       env: staging

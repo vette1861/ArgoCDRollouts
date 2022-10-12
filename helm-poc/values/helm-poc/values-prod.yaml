@@ -1,4 +1,4 @@
-envValues: |
+envValues:
   metrics-server:
     commonLabels:
       env: prod

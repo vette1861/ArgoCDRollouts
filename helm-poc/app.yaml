@@ -58,25 +58,19 @@ spec:
                       chart.pathValues: '../../../values/{{ app }}' # preconfigure path to values file to simplify the template below
                       namespace: '{{ namespace }}'
                       type: 'override'
-          - matrix:
-              generators:
-                - git:
-                    repoURL: https://github.com/vette1861/ArgoCDRollouts.git
-                    revision: HEAD
-                    files:
-                    - path: 'helm-poc/values/{{ app }}/values-{{ env }}.yaml' 
-                    - path: 'helm-poc/values/{{ app }}/values.yaml' 
-                - list:
-                    elements:
-                    - values: '{{ chart.envValues }}'
-                      baseValues: '{{ chart.baseValues }}'
-                      env: '{{ env }}'
-                      app: '{{ app }}'
-                      chart.name: '{{ chart.name }}'
-                      chart.version: '{{ chart.version }}'
-                      chart.path: 'helm-poc/charts/{{ app }}/{{ env }}'
-                      chart.pathValues: '../../../values/{{ app }}'
-                      namespace: '{{ namespace }}'
+          # - matrix:
+          #     generators:
+          - git:
+              repoURL: https://github.com/vette1861/ArgoCDRollouts.git
+              revision: HEAD
+              files:
+              - path: '{{ values.chart.pathValues }}/values-{{ values.env }}.yaml' 
+              # - path: 'helm-poc/values/{{ app }}/values.yaml' 
+                # - git:
+                #     repoURL: https://github.com/vette1861/ArgoCDRollouts.git
+                #     revision: HEAD
+                #     files:
+                #     - path: '{{ values.chart.pathValues }}/values.yaml' 
   template:
     metadata:
       name: "{{ values.app }}-{{ name }}"
@@ -91,8 +85,7 @@ spec:
         helm:
           releaseName: '{{ values.chart.name }}'
           values: |-
-            '{{ values }}'
-            '{{ baseValues }}'
+            '{{ envValues }}'
           # valueFiles:
           #   - '{{ values.chart.pathValues }}/values-{{ values.env }}.yaml'
           #   - '{{ values.chart.pathValues }}/values.yaml'
