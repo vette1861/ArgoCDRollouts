@@ -24,7 +24,15 @@ spec:
                     selector:
                       matchExpressions:
                         - {key: env, operator: Exists}
-                        - {key: env, operator: In, values: ['{{ env }}']}
+                      matchExpressions:
+                        - key: env
+                          operator: In
+                          values:
+                            - sandbox
+                            - dev
+                            - staging
+                            - prod
+                        # - {key: env, operator: In, values: ['{{ env }}']}
                         # - {key: env, operator: In, values: ["sandbox", "dev", "staging", "prod"]}
                     values:
                       env: '{{ metadata.labels.env }}'
