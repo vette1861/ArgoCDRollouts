@@ -2,3 +2,4 @@ metrics-server:
   commonLabels:
     env: prod
     foo: bar
+    values: values-prod

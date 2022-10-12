@@ -73,7 +73,6 @@ spec:
           releaseName: '{{ values.chart.name }}'
           valueFiles:
             - '{{ values.chart.pathValues }}/values-{{ values.env }}.yaml'
-            - '{{ values.chart.pathValues }}/values.yaml'
         path: '{{ values.chart.path }}'
         repoURL: https://github.com/vette1861/ArgoCDRollouts.git
       syncPolicy:

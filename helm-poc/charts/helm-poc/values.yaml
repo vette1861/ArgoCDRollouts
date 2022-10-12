@@ -1,3 +1,4 @@
 metrics-server:
   commonLabels:
     foo: bar
+    values: base
