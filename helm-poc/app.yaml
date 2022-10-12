@@ -64,7 +64,7 @@ spec:
               repoURL: https://github.com/vette1861/ArgoCDRollouts.git
               revision: HEAD
               files:
-              - path: '{{ values.chart.pathValues }}/values-{{ values.env }}.yaml' 
+              - path: 'helm-poc/values/helm-poc/values-{{ values.env }}.yaml' 
               # - path: 'helm-poc/values/{{ app }}/values.yaml' 
                 # - git:
                 #     repoURL: https://github.com/vette1861/ArgoCDRollouts.git
@@ -84,8 +84,9 @@ spec:
       source:
         helm:
           releaseName: '{{ values.chart.name }}'
-          values: |-
-            '{{ envValues }}'
+          values: |
+            metrics-server: |
+              '{{ envValues }}'
           # valueFiles:
           #   - '{{ values.chart.pathValues }}/values-{{ values.env }}.yaml'
           #   - '{{ values.chart.pathValues }}/values.yaml'
