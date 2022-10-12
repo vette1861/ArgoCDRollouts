@@ -25,6 +25,23 @@ spec:
                       chartName: '{{ chart.name }}'
                       chartVersion: '{{ chart.version }}'
                       namespace: '{{ namespace }}'
+          - matrix:
+              generators:
+                - git:
+                    repoURL: https://github.com/vette1861/ArgoCDRollouts.git
+                    revision: HEAD
+                    files:
+                    - path: helm-poc/charts/**/overrides.yaml
+                - clusters:
+                    selector:
+                      matchLabels: 
+                        env: '{{ env }}'
+                    values:
+                      env: '{{ env }}'
+                      app: '{{ app }}'
+                      chartName: '{{ chart.name }}'
+                      chartVersion: '{{ chart.version }}'
+                      namespace: '{{ namespace }}'
   template:
     metadata:
       name: "{{ app }}-{{ name }}"
@@ -39,7 +56,7 @@ spec:
         helm:
           releaseName: '{{ values.chartName }}'
           valueFiles:
-            - 'helm-poc/values/{{ values.app }}/values-{{env}}.yaml'
+            - 'helm-poc/charts/{{ values.app }}/values-{{ values.env }}.yaml'
         path: 'helm-poc/charts/{{ values.app }}'
         repoURL: https://github.com/vette1861/ArgoCDRollouts.git
       syncPolicy:
