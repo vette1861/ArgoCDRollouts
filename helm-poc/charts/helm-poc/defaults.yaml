@@ -1,6 +1,6 @@
 - app: helm-poc
   namespace: helm-poc
-  env: |
+  env: |-
     sandbox dev staging prod
   chart:
     version: 5.11.7
