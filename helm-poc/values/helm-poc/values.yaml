@@ -1,2 +1,5 @@
-chart:
-  version: 5.11.7
+baseValues: |
+  metrics-server:
+    commonLabels:
+      env: staging
+      foo: bar

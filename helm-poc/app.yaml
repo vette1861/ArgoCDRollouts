@@ -30,11 +30,10 @@ spec:
                     values:
                       env: '{{ metadata.labels.env }}'
                       app: '{{ app }}'
-                      chart: '{{ chart }}'
-                      # chartName: '{{ chart.name }}'
-                      # chartVersion: '{{ chart.version }}'
-                      chart.path: 'helm-poc/charts/{{ app }}' # Use base Chart.yaml in app dir 
-                      chart.valuesPath: '../../values/{{ app }}' # preconfigure path to values file to simplify the template below
+                      chart.name: '{{ chart.name }}'
+                      chart.version: '{{ chart.version }}'
+                      chart.path: 'helm-poc/charts/{{ app }}/{{ metadata.labels.env }}' # Use base Chart.yaml in app dir 
+                      chart.pathValues: '../../../values/{{ app }}' # preconfigure path to values file to simplify the template below
                       namespace: '{{ namespace }}'
                       type: 'default'
           - matrix:
@@ -53,13 +52,31 @@ spec:
                     values:
                       env: '{{ env }}'
                       app: '{{ app }}'
-                      chart: '{{ chart }}'
-                      # chartName: '{{ chart.name }}'
-                      # chartVersion: '{{ chart.version }}'
+                      chart.name: '{{ chart.name }}'
+                      chart.version: '{{ chart.version }}'
                       chart.path: 'helm-poc/charts/{{ app }}/{{ env }}' # Use env specific Chart.yaml 
-                      chart.valuesPath: '../../../values/{{ app }}' # preconfigure path to values file to simplify the template below
+                      chart.pathValues: '../../../values/{{ app }}' # preconfigure path to values file to simplify the template below
                       namespace: '{{ namespace }}'
                       type: 'override'
+          - matrix:
+              generators:
+                - git:
+                    repoURL: https://github.com/vette1861/ArgoCDRollouts.git
+                    revision: HEAD
+                    files:
+                    - path: 'helm-poc/values/{{ app }}/values-{{ env }}.yaml' 
+                    - path: 'helm-poc/values/{{ app }}/values.yaml' 
+                - list:
+                    elements:
+                    - values: '{{ chart.envValues }}'
+                      baseValues: '{{ chart.baseValues }}'
+                      env: '{{ env }}'
+                      app: '{{ app }}'
+                      chart.name: '{{ chart.name }}'
+                      chart.version: '{{ chart.version }}'
+                      chart.path: 'helm-poc/charts/{{ app }}/{{ env }}'
+                      chart.pathValues: '../../../values/{{ app }}'
+                      namespace: '{{ namespace }}'
   template:
     metadata:
       name: "{{ values.app }}-{{ name }}"
@@ -73,9 +90,12 @@ spec:
       source:
         helm:
           releaseName: '{{ values.chart.name }}'
-          valueFiles:
-            - '{{ values.chart.valuesPath }}/values-{{ values.env }}.yaml'
-            - '{{ values.chart.valuesPath }}/values.yaml'
+          values: |-
+            '{{ values }}'
+            '{{ baseValues }}'
+          # valueFiles:
+          #   - '{{ values.chart.pathValues }}/values-{{ values.env }}.yaml'
+          #   - '{{ values.chart.pathValues }}/values.yaml'
         path: '{{ values.chart.path }}'
         repoURL: https://github.com/vette1861/ArgoCDRollouts.git
       syncPolicy:

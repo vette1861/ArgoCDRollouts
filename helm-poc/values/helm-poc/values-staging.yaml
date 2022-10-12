@@ -1,4 +1,5 @@
-metrics-server:
-  commonLabels:
-    env: staging
-    foo: bar
+envValues: |
+  metrics-server:
+    commonLabels:
+      env: staging
+      foo: bar
