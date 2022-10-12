@@ -8,5 +8,5 @@ appVersion: "1.0"
 
 dependencies:
 - name: metrics-server
-  version: '{{ .Values.chart.version }}'
+  version: '5.11.7'
   repository: https://charts.bitnami.com/bitnami
