@@ -1,3 +1,4 @@
-values.yaml: |
-  commonLabels.env: prod
-  commonLabels.foo: bar
+metrics-server:
+  commonLabels:
+    env: prod
+    foo: bar
