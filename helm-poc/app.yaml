@@ -20,6 +20,7 @@ spec:
                     revision: HEAD
                     files:
                     - path: helm-poc/charts/**/defaults.yaml
+                    - path: helm-poc/charts/**/default_envs.yaml
                 - clusters:
                     selector:
                       matchExpressions:
@@ -31,7 +32,8 @@ spec:
                       matchExpressions:
                         - key: env
                           operator: In
-                          values: '{{ env }}'
+                          values: 
+                            - '{{ default_env_name }}'
                       # matchExpressions:
                       #   - key: env
                       #     operator: In
