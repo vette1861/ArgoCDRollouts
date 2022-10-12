@@ -22,8 +22,10 @@ spec:
                     - path: helm-poc/charts/**/defaults.yaml
                 - clusters:
                     selector:
-                      matchLabels: 
-                        env: '{{ env }}'
+                      matchExpressions:
+                        - key: env
+                          operator: In
+                          values: '{{ env }}'
                     values:
                       env: '{{ metadata.labels.env }}'
                       app: '{{ app }}'
