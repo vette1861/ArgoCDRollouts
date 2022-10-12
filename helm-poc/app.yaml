@@ -31,11 +31,9 @@ spec:
                       env: '{{ metadata.labels.env }}'
                       app: '{{ app }}'
                       chart.name: '{{ chart.name }}'
-                      chart.version: '{{ chart.version }}'
-                      chart.path: 'helm-poc/charts/{{ app }}/chart-{{ chart.version }}' # Use base Chart.yaml in app dir 
-                      chart.pathValues: '../../../values/{{ app }}' # preconfigure path to values file to simplify the template below
+                      chart.path: '{{ path }}/chart-{{ chart.version }}' # Use default version Chart.yaml
+                      chart.pathValues: '/{{ path[0] }}/values' # preconfigure path to values file to simplify the template below
                       namespace: '{{ namespace }}'
-                      type: 'default'
           - matrix:
               generators:
                 - git:
@@ -52,15 +50,10 @@ spec:
                     values:
                       env: '{{ env }}'
                       app: '{{ app }}'
-                      chart.name: '{{ chart.name }}'
-                      chart.version: '{{ chart.version }}'
-                      chart.path: 'helm-poc/charts/{{ app }}/chart-{{ chart.version }}' # Use env specific Chart.yaml 
-                      chart.pathValues: '../../../values/{{ app }}' # preconfigure path to values file to simplify the template below
-                      namespace: '{{ namespace }}'
-                      type: 'override'
+                      chart.path: '{{ path }}/chart-{{ chart.version }}' # Use version specific Chart.yaml 
   template:
     metadata:
-      name: "{{ values.app }}-{{ name }}"
+      name: "{{ values.app }}-{{ values.env }}"
       labels:
         app: "{{ values.app }}"
     spec:
@@ -72,7 +65,9 @@ spec:
         helm:
           releaseName: '{{ values.chart.name }}'
           valueFiles:
-            - '{{ values.chart.pathValues }}/values-{{ values.env }}.yaml'
+            - '{{ values.chart.pathValues }}/cluster/{{ values.app}}/values-{{ name }}.yaml'
+            - '{{ values.chart.pathValues }}/env/{{ values.app }}/values-{{ values.env }}.yaml'
+          ignoreMissingValueFiles: true
         path: '{{ values.chart.path }}'
         repoURL: https://github.com/vette1861/ArgoCDRollouts.git
       syncPolicy:
