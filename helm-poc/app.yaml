@@ -23,15 +23,15 @@ spec:
                 - clusters:
                     selector:
                       matchExpressions:
-                        - {key: env, operator: NotIn, values: ['{{ env }}']}
-                      # matchLabels:
-                      #   env: '{{ env }}'
+                        - {key: env, operator: Exists}
+                        - {key: env, operator: In, values: ["sandbox", "dev", "staging", "prod"]}
                     values:
                       env: '{{ metadata.labels.env }}'
                       app: '{{ app }}'
                       chartName: '{{ chart.name }}'
                       chartVersion: '{{ chart.version }}'
                       chartPath: 'helm-poc/charts/{{ app }}'
+                      chartValuesPath: '../../values/{{ app }}'
                       namespace: '{{ namespace }}'
                       type: 'default'
           - matrix:
@@ -44,20 +44,23 @@ spec:
                 - clusters:
                     selector:
                       matchLabels: 
-                        env: 'dev'
+                        env: '{{ env }}'
+                      matchExpressions:
+                        - {key: env, operator: Exists}
                     values:
                       env: '{{ env }}'
                       app: '{{ app }}'
                       chartName: '{{ chart.name }}'
                       chartVersion: '{{ chart.version }}'
                       chartPath: 'helm-poc/charts/{{ app }}/{{ env }}'
+                      chartValuesPath: '../../../values/{{ app }}'
                       namespace: '{{ namespace }}'
                       type: 'override'
   template:
     metadata:
-      name: "{{ app }}-{{ name }}"
+      name: "{{ values.app }}-{{ name }}"
       labels:
-        app: "{{ app }}"
+        app: "{{ values.app }}"
     spec:
       project: default
       destination:
@@ -67,9 +70,11 @@ spec:
         helm:
           releaseName: '{{ values.chartName }}'
           valueFiles:
-            - '../../../values/{{ values.app }}/values-{{ values.env }}.yaml'
-            - '../../../values/{{ values.app }}/values.yaml'
-        path: 'helm-poc/charts/{{ values.app }}/{{ values.env }}'
+            - '{{ values.chartValuesPath }}/values-{{ values.env }}.yaml'
+            - '{{ values.chartValuesPath }}/values.yaml'
+            # - '../../../values/{{ values.app }}/values-{{ values.env }}.yaml'
+            # - '../../../values/{{ values.app }}/values.yaml'
+        path: '{{ values.chartPath }}'
         repoURL: https://github.com/vette1861/ArgoCDRollouts.git
       syncPolicy:
         syncOptions:
