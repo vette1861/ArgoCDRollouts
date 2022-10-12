@@ -59,7 +59,8 @@ spec:
           releaseName: '{{ values.chartName }}'
           valueFiles:
             - '../../values/{{ values.app }}/values-{{ values.env }}.yaml'
-        path: 'helm-poc/charts/{{ values.app }}'
+            - '../../values/{{ values.app }}/values.yaml'
+        path: 'helm-poc/charts/{{ values.app }}/{{ values.env }}'
         repoURL: https://github.com/vette1861/ArgoCDRollouts.git
       syncPolicy:
         syncOptions:
