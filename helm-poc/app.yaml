@@ -23,7 +23,7 @@ spec:
                 - clusters:
                     selector:
                       matchExpressions:
-                        - {key: env, operator: NotIn, values: '{{ env }}'}
+                        - {key: env, operator: NotIn, values: ['{{ env }}']}
                       # matchLabels:
                       #   env: '{{ env }}'
                     values:
