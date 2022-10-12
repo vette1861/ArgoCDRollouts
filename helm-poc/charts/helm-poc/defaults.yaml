@@ -1,7 +1,10 @@
 - app: helm-poc
   namespace: helm-poc
-  env: |
-    '[sandbox\, dev\, staging\, prod]'
+  env:
+    - name: sandbox
+    - name: dev
+    - name: staging
+    - name: prod
   chart:
     version: 5.11.7
     name: metrics-server
