@@ -31,7 +31,7 @@ spec:
                       env: '{{ metadata.labels.env }}'
                       app: '{{ app }}'
                       chart.name: '{{ chart.name }}'
-                      chart.path: '{{ path }}/chart-{{ chart.version }}' # Use default version Chart.yaml
+                      chart.path: '{{ path }}/version-{{ chart.version }}' # Use default version Chart.yaml
                       chart.pathValues: '/{{ path[0] }}/values' # preconfigure path to values file to simplify the template below
                       namespace: '{{ namespace }}'
           - matrix:
@@ -64,7 +64,7 @@ spec:
       source:
         helm:
           releaseName: '{{ values.chart.name }}'
-          valueFiles:
+          valueFiles: # Optional cluster values file and env values file
             - '{{ values.chart.pathValues }}/cluster/{{ values.app}}/values-{{ name }}.yaml'
             - '{{ values.chart.pathValues }}/env/{{ values.app }}/values-{{ values.env }}.yaml'
           ignoreMissingValueFiles: true
