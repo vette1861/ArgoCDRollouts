@@ -31,7 +31,7 @@ spec:
                       matchExpressions:
                         - key: env
                           operator: In
-                          values: "{{ env }}"
+                          values: [sandbox, dev, staging, prod]
                       # matchExpressions:
                       #   - key: env
                       #     operator: In
