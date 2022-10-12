@@ -9,4 +9,4 @@ appVersion: "1.0"
 dependencies:
 - name: metrics-server
   version: '{{ .Values.chart.version }}'
-  repository: https://jfrog.mcng.io/artifactory/helm
+  repository: https://charts.bitnami.com/bitnami

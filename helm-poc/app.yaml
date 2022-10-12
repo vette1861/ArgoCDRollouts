@@ -3,6 +3,8 @@ kind: ApplicationSet
 metadata:
   name: helm-poc-appset
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/manifest-generate-paths: ..
 spec:
   generators:
     - merge:
@@ -56,7 +58,7 @@ spec:
         helm:
           releaseName: '{{ values.chartName }}'
           valueFiles:
-            - 'helm-poc/charts/{{ values.app }}/values-{{ values.env }}.yaml'
+            - '../../values/{{ values.app }}/values-{{ values.env }}.yaml'
         path: 'helm-poc/charts/{{ values.app }}'
         repoURL: https://github.com/vette1861/ArgoCDRollouts.git
       syncPolicy:
