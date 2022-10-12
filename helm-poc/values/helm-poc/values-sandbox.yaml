@@ -1,4 +1,5 @@
-envValues: |
+envValues:
+  foo: bar
   metrics-server:
     commonLabels:
       env: sandbox
