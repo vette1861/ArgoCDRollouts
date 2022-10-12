@@ -30,11 +30,10 @@ spec:
                     values:
                       env: '{{ metadata.labels.env }}'
                       app: '{{ app }}'
-                      chart: '{{ chart }}'
-                      # chartName: '{{ chart.name }}'
-                      # chartVersion: '{{ chart.version }}'
-                      chart.path: 'helm-poc/charts/{{ app }}' # Use base Chart.yaml in app dir 
-                      chart.valuesPath: '../../values/{{ app }}' # preconfigure path to values file to simplify the template below
+                      chartName: '{{ chart.name }}'
+                      chartVersion: '{{ chart.version }}'
+                      chartPath: 'helm-poc/charts/{{ app }}' # Use base Chart.yaml in app dir 
+                      chartValuesPath: '../../values/{{ app }}' # preconfigure path to values file to simplify the template below
                       namespace: '{{ namespace }}'
                       type: 'default'
           - matrix:
@@ -53,11 +52,10 @@ spec:
                     values:
                       env: '{{ env }}'
                       app: '{{ app }}'
-                      chart: '{{ chart }}'
-                      # chartName: '{{ chart.name }}'
-                      # chartVersion: '{{ chart.version }}'
-                      chart.path: 'helm-poc/charts/{{ app }}/{{ env }}' # Use env specific Chart.yaml 
-                      chart.valuesPath: '../../../values/{{ app }}' # preconfigure path to values file to simplify the template below
+                      chartName: '{{ chart.name }}'
+                      chartVersion: '{{ chart.version }}'
+                      chartPath: 'helm-poc/charts/{{ app }}/{{ env }}' # Use env specific Chart.yaml 
+                      chartValuesPath: '../../../values/{{ app }}' # preconfigure path to values file to simplify the template below
                       namespace: '{{ namespace }}'
                       type: 'override'
   template:
@@ -71,12 +69,14 @@ spec:
         server: '{{ server }}'
         namespace: '{{ values.namespace }}'
       source:
-        helm:
-          releaseName: '{{ values.chart.name }}'
-          valueFiles:
-            - '{{ values.chart.valuesPath }}/values-{{ values.env }}.yaml'
-            - '{{ values.chart.valuesPath }}/values.yaml'
-        path: '{{ values.chart.path }}'
+        plugin:
+          name: '{{ values.defaults.plugin.name }}'
+          env: 
+            - name: HELM_NAME
+              value: '{{ values.chartName }}'
+            - name: helm_args
+              value: -f '{{ values.chartValuesPath}}/values-{{ values.env }}.yaml' -f '{{ values.chartValuesPath }}/values.yaml'
+        path: '{{ values.chartPath }}'
         repoURL: https://github.com/vette1861/ArgoCDRollouts.git
       syncPolicy:
         syncOptions:

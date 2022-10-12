@@ -1,2 +1,0 @@
-default_env: 
-  list: '[sandbox, dev, staging, prod]'
