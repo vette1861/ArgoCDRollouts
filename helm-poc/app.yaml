@@ -21,12 +21,15 @@ spec:
                     files:
                     - path: helm-poc/charts/**/defaults.yaml
                 - clusters:
+                    selector:
+                      matchLabels: 
+                        env: '{{ env }}'
                     values:
                       env: '{{ metadata.labels.env }}'
                       app: '{{ app }}'
                       chartName: '{{ chart.name }}'
                       chartVersion: '{{ chart.version }}'
-                      chartPath: 'helm-poc/charts/{{ values.app }}'
+                      chartPath: 'helm-poc/charts/{{ app }}'
                       namespace: '{{ namespace }}'
                       type: 'default'
           - matrix:
@@ -45,7 +48,7 @@ spec:
                       app: '{{ app }}'
                       chartName: '{{ chart.name }}'
                       chartVersion: '{{ chart.version }}'
-                      chartPath: 'helm-poc/charts/{{ values.app }}/{{ values.env }}'
+                      chartPath: 'helm-poc/charts/{{ app }}/{{ env }}'
                       namespace: '{{ namespace }}'
                       type: 'override'
   template:
@@ -64,7 +67,7 @@ spec:
           valueFiles:
             - '../../../values/{{ values.app }}/values-{{ values.env }}.yaml'
             - '../../../values/{{ values.app }}/values.yaml'
-        path: '{{ values.chartPath }}'
+        path: 'helm-poc/charts/{{ values.app }}/{{ values.env }}'
         repoURL: https://github.com/vette1861/ArgoCDRollouts.git
       syncPolicy:
         syncOptions:
