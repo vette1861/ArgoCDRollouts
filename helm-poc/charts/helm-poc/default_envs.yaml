@@ -1,4 +1,6 @@
-- default_env_name: sandbox
-- default_env_name: dev
-- default_env_name: staging
-- default_env_name: prod
+default_env: 
+  list:
+    - sandbox
+    - dev
+    - staging
+    - prod

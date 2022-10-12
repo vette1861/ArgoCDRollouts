@@ -33,7 +33,7 @@ spec:
                         - key: env
                           operator: In
                           values: 
-                            - '{{ default_env_name }}'
+                            - '{{ default_env.list }}'
                       # matchExpressions:
                       #   - key: env
                       #     operator: In
