@@ -1,2 +1,2 @@
 default_env: 
-  list: [sandbox, dev, staging, prod]
+  list: '[sandbox, dev, staging, prod]'
